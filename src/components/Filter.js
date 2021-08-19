@@ -2,7 +2,7 @@ import React, { useEffect, useContext } from 'react';
 import Context from '../context/Context';
 
 function Filter() {
-  const { setData } = useContext(Context);
+  const { setData, filters: { filterByName: { setName } } } = useContext(Context);
 
   useEffect(() => {
     const getPlanets = async () => {
@@ -15,8 +15,20 @@ function Filter() {
     getPlanets();
   }, [setData]);
 
+  const handleChange = ({ target }) => {
+    setName(target.value);
+  };
+
   return (
-    <h1>Filters</h1>
+    <form>
+      <div>
+        <input
+          data-testid="name-filter"
+          type="text"
+          onChange={ handleChange }
+        />
+      </div>
+    </form>
   );
 }
 
