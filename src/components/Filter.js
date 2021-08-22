@@ -1,34 +1,22 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import Context from '../context/Context';
 
 function Filter() {
-  const { setData, filters: { filterByName: { setName } } } = useContext(Context);
-
-  useEffect(() => {
-    const getPlanets = async () => {
-      const endpoint = 'https://swapi-trybe.herokuapp.com/api/planets/';
-      const planets = await fetch(endpoint)
-        .then((response) => response.json())
-        .then((data) => data.results);
-      setData(planets);
-    };
-    getPlanets();
-  }, [setData]);
-
-  const handleChange = ({ target }) => {
-    setName(target.value);
-  };
-
+  const { name, options, options2, guardaName, guardaComparison, guardaValor,
+    Filtrar } = useContext(Context);
   return (
-    <form>
-      <div>
-        <input
-          data-testid="name-filter"
-          type="text"
-          onChange={ handleChange }
-        />
-      </div>
-    </form>
+    <div>
+      <select data-testid="column-filter" onChange={ guardaName } value={ name }>
+        { options.map((option) => <option key={ option }>{option}</option>) }
+      </select>
+      <select data-testid="comparison-filter" onChange={ guardaComparison }>
+        { options2.map((option2) => <option key={ option2 }>{option2}</option>) }
+      </select>
+      <input data-testid="value-filter" type="number" onChange={ guardaValor } />
+      <button type="button" data-testid="button-filter" onClick={ Filtrar }>
+        Filtrar
+      </button>
+    </div>
   );
 }
 
