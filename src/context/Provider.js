@@ -6,12 +6,12 @@ import Context from './Context';
 function Provider({ children }) {
   const [dados, setDados] = useState([]);
   const [filtro, setFiltro] = useState([]);
-  const [name, setName] = useState('population');
-  const [comparison, setComparison] = useState('maior que');
+  const [name, setName] = useState('');
+  const [comparison, setComparison] = useState('');
   const [valor, setValor] = useState();
-  const options = ['population',
-    'orbital_period', 'diameter', 'rotation_period', 'surface_water'];
-  const options2 = ['maior que', 'menor que', 'igual a'];
+  const [options, setOptions] = useState(['population',
+    'orbital_period', 'diameter', 'rotation_period', 'surface_water']);
+  const [options2, setOptions2] = useState(['maior que', 'menor que', 'igual a']);
 
   useEffect(() => {
     const getDados = async () => {
@@ -49,7 +49,21 @@ function Provider({ children }) {
     const { value } = element.target;
     setValor(value);
   };
-
+  // consulta slice: https://pt.stackoverflow.com/questions/344404/diferen%C3%A7a-entre-splice-e-slice
+  // tirei a idéia de usar do respositório do coloega Ygor Saturnino
+  const changeFilters = () => {
+    const newOptions = options.indexOf(name);
+    const newOptions2 = options2.indexOf(comparison);
+    const num = -1;
+    if (newOptions > num) {
+      options.splice(newOptions, 1);
+    }
+    if (newOptions2 > num) {
+      options2.splice(newOptions2, 1);
+    }
+    setOptions(options);
+    setOptions2(options2);
+  };
   // consulta parseFoat :https://pt.stackoverflow.com/questions/10002/como-a-fun%C3%A7%C3%A3o-parsefloat-funciona
   const Filtrar = () => {
     const dadosFiltrados = dados.filter((dado) => {
@@ -65,6 +79,7 @@ function Provider({ children }) {
       }
     });
     setFiltro(dadosFiltrados);
+    changeFilters();
   };
 
   const contextValue = { dados,
